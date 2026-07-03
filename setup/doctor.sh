@@ -110,7 +110,46 @@ else
 	warn "/etc/hosts differs from composed hosts - run 'make setup'"
 fi
 
-# Registered plugins (entries under plugins/, including broken symlinks)
+# Registered plugins: symlink resolves, and every part the plugin contributes
+# is actually linked into ~/.claude (and config.sh into the repo root).
+verify_plugin_links() {
+	local plugin="$1" missing=() f base target
+
+	for f in "$plugin"/claude/skills/*/; do
+		[ -d "$f" ] || continue
+		base="$(basename "$f")"
+		[ -e ~/.claude/skills/"$base" ] || missing+=("skills/$base")
+	done
+	for f in "$plugin"/claude/agents/*.md; do
+		[ -f "$f" ] || continue
+		base="$(basename "$f")"
+		[ -e ~/.claude/agents/"$base" ] || missing+=("agents/$base")
+	done
+	for f in "$plugin"/claude/hooks/*; do
+		[ -f "$f" ] || continue
+		base="$(basename "$f")"
+		[[ "$base" == .* ]] && continue
+		[ -e ~/.claude/hooks/"$base" ] || missing+=("hooks/$base")
+	done
+	for f in "$plugin"/claude/docs/*; do
+		[ -f "$f" ] || continue
+		base="$(basename "$f")"
+		[ -e ~/.claude/docs/"$base" ] || missing+=("docs/$base")
+	done
+	if [ -f "$plugin/claude/settings.json" ]; then
+		target="$(readlink ~/.claude/settings.json 2>/dev/null)"
+		case "$target" in
+			*/plugins/*) : ;;
+			*) missing+=("settings.json (not linked from a plugin)") ;;
+		esac
+	fi
+	if [ -f "$plugin/config.sh" ] && [ ! -e "$REPO/config.sh" ]; then
+		missing+=("config.sh (not linked to repo root)")
+	fi
+
+	printf '%s\n' "${missing[@]}"
+}
+
 shopt -s nullglob
 plugins=("$REPO/plugins"/*)
 shopt -u nullglob
@@ -119,10 +158,16 @@ if [ "${#plugins[@]}" -eq 0 ]; then
 else
 	for plugin in "${plugins[@]}"; do
 		name="$(basename "$plugin")"
-		if [ -d "$plugin" ]; then
-			ok "Plugin '$name' -> $(cd "$plugin" && pwd -P)"
-		else
+		if [ ! -d "$plugin" ]; then
 			warn "Plugin '$name' is broken - re-run 'make plugin' or remove plugins/$name"
+			continue
+		fi
+		resolved="$(cd "$plugin" && pwd -P)"
+		missing="$(verify_plugin_links "$plugin")"
+		if [ -z "$missing" ]; then
+			ok "Plugin '$name' installed ($resolved)"
+		else
+			warn "Plugin '$name' incomplete - run 'make plugin DIR=$resolved'; missing: $(echo "$missing" | paste -sd, -)"
 		fi
 	done
 fi
