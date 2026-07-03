@@ -67,4 +67,3 @@ EOF
             ;;
     esac
 }
-export -f mode
