@@ -1,0 +1,70 @@
+function mode() {
+    local gitconfig_local="$HOME/.gitconfig.local"
+
+    case "$1" in
+        work)
+            cat > "$gitconfig_local" <<EOF
+[user]
+	name = {{GIT_USER_NAME}}
+	email = {{WORK_EMAIL}}
+	signingkey = {{WORK_SIGNING_KEY}}
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	allowedSignersFile = ~/.ssh/allowed_signers
+EOF
+            export OP_ACCOUNT="{{WORK_1PW_ACCOUNT}}"
+            echo "Switched to work mode"
+            mode status
+            ;;
+        home|personal)
+            cat > "$gitconfig_local" <<EOF
+[user]
+	name = {{GIT_USER_NAME}}
+	email = {{PERSONAL_EMAIL}}
+	signingkey = {{PERSONAL_SIGNING_KEY}}
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+	allowedSignersFile = ~/.ssh/allowed_signers
+EOF
+            export OP_ACCOUNT="{{PERSONAL_1PW_ACCOUNT}}"
+            echo "Switched to home mode"
+            mode status
+            ;;
+        switch)
+            local email
+            email=$(git config user.email 2>/dev/null)
+            case "$email" in
+                "{{WORK_EMAIL}}") mode home ;;
+                *) mode work ;;
+            esac
+            ;;
+        status)
+            echo ""
+            echo "=== Git ==="
+            echo "  name:  $(git config user.name 2>/dev/null)"
+            echo "  email: $(git config user.email 2>/dev/null)"
+            echo ""
+            echo "=== 1Password ==="
+            echo "  account: ${OP_ACCOUNT:-(not set)}"
+            echo ""
+            echo "=== Claude Code ==="
+            /opt/homebrew/bin/claude auth status 2>/dev/null || echo "  (not signed in)"
+            echo ""
+            ;;
+        "")
+            mode status
+            ;;
+        *)
+            echo "Usage: mode <work|home|switch|status>"
+            ;;
+    esac
+}
+export -f mode

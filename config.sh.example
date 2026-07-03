@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# User-specific configuration. Copy this file to config.sh and edit the values
+# for your setup. config.sh is gitignored (it holds machine/identity details).
+#
+# On a machine with a private plugin that provides its own config.sh, running
+# `make plugin DIR=<path>` symlinks the plugin's config.sh here for you, so you
+# don't need to create this file by hand.
+
+# Brewfile
+BREWDUMP_REMINDER_DAYS=30
+
+# Git
+GIT_USER_NAME="Your Name"
+
+# Optional: if set, setup/macos.sh symlinks /Users/<name> -> $HOME so stale
+# tooling that references an old macOS username still resolves. Leave blank to skip.
+LEGACY_USERNAME=""
+
+# GitHub orgs whose repos must be committed with the work email (enforced by git/hooks/pre-commit)
+WORK_GITHUB_ORGS="your-work-org"
+
+# Work identity
+WORK_EMAIL="you@work.com"
+WORK_1PW_ACCOUNT="your-work.1password.com"
+WORK_1PW_KEY="op://Employee/Your Work Machine/public key"
+
+# Personal identity
+PERSONAL_EMAIL="you@personal.com"
+PERSONAL_1PW_ACCOUNT="my.1password.com"
+PERSONAL_1PW_KEY="op://Private/Your Personal Machine/public key"

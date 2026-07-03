@@ -1,0 +1,20 @@
+################################################################################
+# GLOBAL GIT IGNORE
+# Symlinked to ~/.gitignore_global and applied to every repo via
+# core.excludesfile. Repo-specific ignores belong in each repo's .gitignore.
+################################################################################
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# WebStorm config
+.idea

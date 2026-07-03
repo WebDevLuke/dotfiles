@@ -1,0 +1,16 @@
+.DS_Store
+.idea
+
+# Claude Code project-level runtime dir (not the config in claude/)
+.claude/
+
+# Generated files (contain resolved secrets from 1Password)
+zsh/functions/mode.sh
+reports/
+plans/
+
+# Machine/identity config (copy config.sh.example to config.sh)
+config.sh
+
+# Registered plugins (symlinks to private overlay repos)
+plugins/

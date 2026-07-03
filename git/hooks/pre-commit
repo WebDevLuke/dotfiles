@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Global pre-commit hook (wired via core.hooksPath -> ~/.git_hooks).
+#
+# Identity guard: blocks commits to work-org repos made with the wrong git
+# email, catching the classic "forgot to run 'mode work'" mistake. Org list
+# and emails come from config.sh (WORK_GITHUB_ORGS / WORK_EMAIL).
+#
+# Because a global hooksPath shadows each repo's own .git/hooks, this script
+# chains to the repo-local pre-commit hook afterwards if one exists. Repos
+# that set core.hooksPath locally (e.g. husky) override the global one and
+# skip this guard entirely.
+
+source ~/git/dotfiles/config.sh 2>/dev/null
+
+url=$(git remote get-url origin 2>/dev/null)
+email=$(git config user.email)
+
+for org in $WORK_GITHUB_ORGS; do
+	case "$url" in
+		*github.com[:/]"$org"/*)
+			if [ "$email" != "$WORK_EMAIL" ]; then
+				echo "✋ Commit blocked: this repo belongs to work org '$org' but your git email is '${email:-unset}'."
+				echo "   Run 'mode work' to switch identity, then commit again."
+				exit 1
+			fi
+			;;
+	esac
+done
+
+repo_hook="$(git rev-parse --git-dir)/hooks/pre-commit"
+if [ -x "$repo_hook" ]; then
+	exec "$repo_hook" "$@"
+fi

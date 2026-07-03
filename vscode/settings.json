@@ -1,0 +1,144 @@
+{
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "diffEditor.codeLens": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.fontFamily": "Inconsolata, monospace",
+  "editor.fontSize": 16,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.suggestSelection": "first",
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "off",
+    "strings": "on"
+  },
+  "enableTelemetry": true,
+  "explorer.confirmDelete": false,
+  "git.confirmSync": false,
+  "git.suggestSmartCommit": false,
+  "gitlens.blame.highlight.locations": ["gutter", "overview"],
+  "gitlens.currentLine.enabled": false,
+  "gitlens.hovers.currentLine.over": "line",
+  "npm.enableRunFromFolder": true,
+  "npm.packageManager": "yarn",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.fontSize": 13,
+  "todo-tree.general.tags": ["BUG", "HACK", "FIXME", "TODO", "XXX", "hello"],
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#2b2d2e",
+    "statusBar.debuggingBackground": "#2b2d2e",
+    "statusBar.noFolderBackground": "#2b2d2e"
+  },
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.startupEditor": "none",
+  "yaml.schemas": {
+    "file:///Users/lukeharrison/.vscode/extensions/docsmsft.docs-yaml-0.2.9/out/yaml-support/toc.schema.json": "/toc\\.yml/i"
+  },
+  "editor.wordWrap": "on",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.compactFolders": false,
+  "azureFunctions.showProjectWarning": false,
+  "redhat.telemetry.enabled": true,
+  "atlascode.bitbucket.enabled": false,
+  "editor.bracketPairColorization.enabled": true,
+  "terminal.integrated.tabs.enabled": true,
+  "atlascode.jira.jqlList": [],
+  "editor.minimap.enabled": false,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "diffEditor.ignoreTrimWhitespace": true,
+  "json.maxItemsComputed": 500,
+  "vsintellicode.features.python.deepLearning": "disabled",
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "editor.unicodeHighlight.allowedCharacters": {
+    "’": true
+  },
+  "githubPullRequests.createOnPublishBranch": "never",
+  "xml.server.binary.trustedHashes": [
+    "8080595d4aee6c70818be8c8c8f58db8e2214082492def527ac383970e75da4c"
+  ],
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "githubPullRequests.pullBranch": "never",
+  "git.mergeEditor": false,
+  "atlascode.jira.enabled": true,
+  "tailwindCSS.experimental.classRegex": [],
+  "terminal.integrated.scrollback": 10000,
+  "workbench.editor.empty.hint": "hidden",
+  "security.workspace.trust.untrustedFiles": "open",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "docker.extension.enableComposeLanguageServer": false,
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "atlascode.jira.startWorkBranchTemplate.customPrefixes": [
+    "feature/",
+    "hotfix/"
+  ],
+  "github.copilot.advanced": {},
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "atlascode.jira.lastCreateSiteAndProject": {
+    "siteId": "6dc29dff-bffc-4d2a-9547-f4a42d1289a4",
+    "projectKey": "ACQ"
+  },
+  "git.blame.editorDecoration.enabled": false,
+  "atlascode.rovodev.showEntitlementNotifications": false,
+  "workbench.editorAssociations": {
+    "*.svg": "default"
+  },
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.hideOnboarding": true,
+  "claudeCode.environmentVariables": [],
+  "claudeCode.spinnerVerbs": {
+    "mode": "replace",
+    "verbs": ["Thinking"]
+  },
+  "explorer.confirmPasteNative": false,
+  "terraform.languageServer.enable": false,
+  "claudeCode.selectedModel": "default",
+  "claudeCode.allowDangerouslySkipPermissions": true,
+  "terminal.integrated.initialHint": false,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.excludeDirty": true,
+  "workbench.editor.limit.perEditorGroup": true,
+  "workbench.editor.limit.value": 4,
+  "claudeCode.enableNewConversationShortcut": true,
+  "git.autofetch": true
+  //"editor.stickyScroll.enabled": true,
+}
