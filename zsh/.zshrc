@@ -2,8 +2,8 @@
 # BOILERPLATE
 ################################################################################
 
-# Load aliases, prompt and functions. (.N) = regular files, no error if none.
-for f in ~/.zsh_aliases ~/.zsh_prompt ~/.zsh_functions/*(.N); do
+# Load aliases, prompt and functions. (-.N) = files (following symlinks, since the function files are symlinked in), no error if none.
+for f in ~/.zsh_aliases ~/.zsh_prompt ~/.zsh_functions/*(-.N); do
 	[[ -r "$f" ]] && source "$f"
 done
 
