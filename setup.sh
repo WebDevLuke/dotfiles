@@ -16,6 +16,23 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# config.sh holds machine/identity details (git identity, 1Password refs) and is
+# gitignored, so it never exists on a fresh clone. Require it up front rather than
+# letting later steps skip silently.
+if [ ! -f "$SCRIPT_DIR/config.sh" ]; then
+	echo ""
+	echo "══════════════════════════════════════"
+	echo "  ⛔ Missing config.sh"
+	echo "══════════════════════════════════════"
+	echo ""
+	echo "  setup needs a config.sh before it can run. Create one with either:"
+	echo ""
+	echo "    cp config.sh.example config.sh   # then edit the values"
+	echo "    make plugin DIR=<path>           # if a plugin provides one"
+	echo ""
+	exit 1
+fi
+
 # Collected by the sourced setup scripts and reported at the end.
 SETUP_WARNINGS=()
 

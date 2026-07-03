@@ -44,18 +44,25 @@ if [ -f "$REPO/Brewfile" ]; then
 	if /opt/homebrew/bin/brew bundle check --file="$REPO/Brewfile" &>/dev/null; then
 		_bundle_ok=true
 	else
-		echo "  Installing packages from Brewfile (may take a while)..."
-		echo ""
-		if /opt/homebrew/bin/brew bundle install --file="$REPO/Brewfile" --no-upgrade --verbose; then
-			echo ""
-			echo "  ✅ Packages installed"
-			date +%s > ~/.brewdump_last
-
+		read -r -p "  Install packages from Brewfile? [Y/n] " _install_apps
+		if [[ "$_install_apps" =~ ^[Nn] ]]; then
+			echo "  ⏭️  Skipped Brewfile packages"
+			SETUP_WARNINGS+=("Skipped Brewfile packages — run 'make setup' again to install them.")
 		else
+			echo "  Installing packages from Brewfile (may take a while)..."
 			echo ""
-			echo "  ⚠️  Some Brewfile packages failed to install (see output above)"
-			SETUP_WARNINGS+=("Some Brewfile packages failed to install — see the Homebrew output above.")
+			if /opt/homebrew/bin/brew bundle install --file="$REPO/Brewfile" --no-upgrade --verbose; then
+				echo ""
+				echo "  ✅ Packages installed"
+				date +%s > ~/.brewdump_last
+
+			else
+				echo ""
+				echo "  ⚠️  Some Brewfile packages failed to install (see output above)"
+				SETUP_WARNINGS+=("Some Brewfile packages failed to install — see the Homebrew output above.")
+			fi
 		fi
+		unset _install_apps
 	fi
 fi
 
