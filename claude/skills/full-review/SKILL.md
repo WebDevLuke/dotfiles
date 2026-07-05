@@ -20,6 +20,8 @@ Follow the communication style in CLAUDE.md - terse, concise, no unnecessary pre
 
 The skill produces a report and triages findings. The user makes every decision. Applying a fix without explicit per-finding approval is a violation of this skill's contract.
 
+**One bounded exception - `test-review` findings.** Testing findings (adding or adjusting tests) are low-risk and near-always wanted, so they may be actioned as a group via a **single** explicit bulk-confirmation (see Step 9) rather than one prompt per finding - applying each finding's *recommended* action (Fix now, or Defer where that is the recommendation). This is still an explicit user approval and still logged per-finding in the report; it is a shortcut through per-item triage, not a silent auto-fix. **No other category may be bulk-actioned this way** - the per-finding rule above holds for everything except `test-review`, and even testing findings require the one up-front confirmation.
+
 ## Input
 
 Accepts zero or more arguments:
@@ -355,6 +357,8 @@ Follow the shared triage pattern at [docs/triage-pattern.md](../../docs/triage-p
    - **Triage CRITICAL+HIGH only, defer the rest** - triage CRITICAL and HIGH individually; Defer everything MEDIUM and below.
 
    Bulk decisions still **annotate the report per finding** (Step 10's Status lines) so resume mode can revisit any of them later - the bulk choice is a shortcut through triage, not a shortcut past the durable log.
+
+   **Testing findings - bulk-confirm shortcut (the exception from "No auto-fixes").** When the report contains any `test-review`-category findings, before the numbered individual triage offer a single `AskUserQuestion` (header `Tests`, single-select): **Apply all testing findings** / **Triage them individually**. List each testing finding's ID + its **recommended action** (Fix now, or Defer) in the question text so the one approval is informed. On **Apply all**, action every testing finding by its recommendation in Step 10 (fixes applied, defers opened as issues) and annotate each per-finding, then **remove them from the individual triage sequence** - the remaining non-testing findings triage as normal in strict numerical order. On **Triage individually**, they stay in the normal per-finding flow. This is the only category that may be actioned as a batch on a single confirmation; every other finding keeps its own Fix now / Accept / Defer decision.
 
 2. **Triage** - the `AskUserQuestion` `header` is capped at ~12 chars, so put only the **global sequential ID** in the header (e.g. `#3 HIGH`) and carry the severity / category / file:line detail (e.g. `HIGH / Security - file.ts:42`) in the question **text**, not the header. This keeps findings referable by number while staying inside the header limit. Options: **Fix now** / **Accept as-is** / **Defer**.
 
