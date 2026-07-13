@@ -6,6 +6,8 @@
 
 If `docs/jira.md` is present (provided by a private plugin), follow it for full Jira workflows (via the Atlassian MCP). Otherwise there is no Jira integration configured.
 
+Whenever you write or rewrite a Jira issue description - in any flow, whether or not the skill is explicitly invoked - always follow the `writing-jira-descriptions` skill (plain lead, ≤5 bullets, visible Given/When/Then acceptance criteria, and the verbose detail collapsed in a "Details for AI agents" ADF expand). This is the house format; use `contentFormat: "adf"` so the expand renders.
+
 ## Agents and Skills
 
 The source of truth for all Claude config is the **dotfiles repo** at `~/git/dotfiles/claude/`. Files are symlinked from there into `~/.claude/` by `setup/claude.sh`. **Never create agents or skills directly in `~/.claude/`** — always add them to the dotfiles repo so they're version-controlled and portable.
