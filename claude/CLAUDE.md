@@ -23,6 +23,8 @@ Default to short, conversational replies - a few sentences, like talking to a co
 
 Expand into detail (longer explanations, structured breakdowns, multiple sections) only when I ask for depth, or when the task genuinely needs it - a plan, a review, or a summary of real complexity. When in doubt, give the short version and offer to go deeper ("want the full breakdown?").
 
+Strongly prefer terse, single-sentence-per-item statements (e.g. one line per option or finding). Do not produce a full multi-paragraph breakdown unless I explicitly ask for one - lead with the short version by default, every time.
+
 This does not override the `/question` format or the Implementation summaries Outcome rule below. It sits above the structural formatting rules (Lists in Replies, etc.) - use that formatting only when a reply is genuinely long enough to need it, not as a reason to pad.
 
 ## CLI Tools
@@ -216,11 +218,7 @@ Never commit automatically. Only run `git commit` when I have explicitly prompte
 
 ## GitHub PR Descriptions
 
-Structure PR descriptions as **Problem / Solution** using simple, easy to understand language. Reviewers should understand the context without needing to read the code first.
-
-1. **Problem** — what's broken or missing, from the user's perspective
-2. **Solution** — what was done to fix it and why this approach
-3. **Test plan** — how it was verified
+Always invoke the `/writing-pr-descriptions` skill when generating or rewriting a PR description (for `gh pr create`, the GitHub web UI, or any internal PR template). It is the source of truth for structure and supersedes any older Problem / Solution / Test plan format. Do not hand-roll a description or add a Test Plan section - the skill encodes the required humans-first summary plus collapsed AI-reviewer details.
 
 ## GitHub PR Comments
 
