@@ -1,9 +1,9 @@
 ---
 name: full-review
-description: Run 15 bundled specialist reviewers (accessibility, perf-scan, security-review, html-review, abstract, coding-standards, responsive-design, convention-drift, seo-review, web-design-guidelines, bughunt, test-review, schema-review, dep-review, intent-review) in parallel across one or more repos and produce a consolidated categorised report. Triages findings with the user, applies approved fixes, and optionally proposes guidance/hooks to prevent recurring issues.
+description: Run 16 bundled specialist reviewers (accessibility, perf-scan, security-review, html-review, abstract, coding-standards, component-audit, responsive-design, convention-drift, seo-review, web-design-guidelines, bughunt, test-review, schema-review, dep-review, intent-review) in parallel across one or more repos and produce a consolidated categorised report. Triages findings with the user, applies approved fixes, and optionally proposes guidance/hooks to prevent recurring issues.
 ---
 
-Orchestrates 15 specialist reviewers in parallel across one or more repos, consolidates their findings into a single categorised report with severities, and triages each finding with the user before applying fixes. The reviewers are bundled with this skill as trimmed briefs under `reviewers/` - they are not standalone skills.
+Orchestrates 16 specialist reviewers in parallel across one or more repos, consolidates their findings into a single categorised report with severities, and triages each finding with the user before applying fixes. The reviewers are bundled with this skill as trimmed briefs under `reviewers/` - they are not standalone skills.
 
 Use this skill both as a heavyweight pre-PR audit and as the lighter pre-push gate (pick "Uncommitted changes" scope - the `convention-drift` reviewer specifically covers what previously lived in `/pre-review`).
 
@@ -67,6 +67,7 @@ Each reviewer is a trimmed brief at `reviewers/{name}.md` inside this skill's di
 | `abstract` | code reuse, quality, efficiency | any | any |
 | `bughunt` | runtime bugs - logic, state/data flow, concurrency/timing | any | any |
 | `coding-standards` | naming, readability, immutability, TypeScript discipline | any | any |
+| `component-audit` | whole-tree component naming taxonomy + consolidation/merge candidates (rename outliers, primitives bypassed or wanting extraction) | component files (JSX/TSX/Vue/Svelte) present | whole-repo only |
 | `convention-drift` | CLAUDE.md compliance, cross-file ripple, rename drift, documentation drift, multi-branch consistency | any | uncommitted changes only |
 | `dep-review` | unused/outdated/deprecated deps, license drift, duplicate-purpose packages (excludes CVEs - owned by `security-review`) | manifest file present | any |
 | `html-review` | HTML structure, semantics, landmarks | HTML/JSX/TSX present | any |
@@ -87,9 +88,11 @@ The `simplify` skill is intentionally excluded - it duplicates the `abstract` re
 
 `convention-drift` only runs against "uncommitted changes" scope - its checks (rename drift, "test exercises the change", multi-branch consistency) are intrinsically diff-relative and don't make sense for a whole-repo or path-glob scan.
 
+`component-audit` is the mirror image: it only runs against **whole-repo** scope. Its checks (naming taxonomy across the whole component tree, consolidation candidates spanning many components) are intrinsically standing-state surveys and produce nothing meaningful from a diff or path-glob. It stays default-on but is silently skipped in the common diff/pre-push run, so it never bloats those - it only fires when the user deliberately picks whole-repo scope.
+
 ## Step 0: Verify all reviewer briefs are present
 
-Check that each brief exists at `~/.claude/skills/full-review/reviewers/{name}.md` for the 15 reviewers (a single `ls` of the directory suffices). If **any** are missing, output:
+Check that each brief exists at `~/.claude/skills/full-review/reviewers/{name}.md` for the 16 reviewers (a single `ls` of the directory suffices). If **any** are missing, output:
 
 ```
 Missing reviewer briefs: {list}
@@ -114,7 +117,7 @@ Use `AskUserQuestion`:
 
    List the reviewer names in the question text so the user sees what "all" means.
 
-2. If the user picks **Customise**, present the reviewers as multi-select options to deselect. `AskUserQuestion` allows **at most 4 options per question** (and at most 4 questions per call), so with more than 4 reviewers you must **split them across multiple multi-select questions in a single call**. For the current 15 reviewers, use four `multiSelect` questions (4 + 4 + 4 + 3 options; headers `Skip 1/4`, `Skip 2/4`, `Skip 3/4`, `Skip 4/4` - the `header` field is capped at ~12 chars); each option's label is the reviewer name and its description is the "Covers" text from the table. **Anything the user selects across those questions is skipped**; anything left unselected still runs. If the user ends up skipping every reviewer, output `No reviewers left to run - nothing to review` and stop.
+2. If the user picks **Customise**, present the reviewers as multi-select options to deselect. `AskUserQuestion` allows **at most 4 options per question** (and at most 4 questions per call), so with more than 4 reviewers you must **split them across multiple multi-select questions in a single call**. For the current 16 reviewers, use four `multiSelect` questions (4 + 4 + 4 + 4 options; headers `Skip 1/4`, `Skip 2/4`, `Skip 3/4`, `Skip 4/4` - the `header` field is capped at ~12 chars); each option's label is the reviewer name and its description is the "Covers" text from the table. **Anything the user selects across those questions is skipped**; anything left unselected still runs. If the user ends up skipping every reviewer, output `No reviewers left to run - nothing to review` and stop.
 
 Call the resulting set **S** (the user-enabled reviewers) and carry it into Step 2. Log S before proceeding.
 
@@ -163,6 +166,7 @@ Apply these filters only to the reviewers in **S** (the set the user enabled in 
 - `web-design-guidelines` -> same as `html-review`
 - `responsive-design` -> requires scope to contain `.css`, `.html`, `.tsx`, or `.jsx` files
 - `convention-drift` -> requires scope mode `diff` (skip for `paths` and `whole-repo`)
+- `component-audit` -> requires scope mode `whole-repo` (skip for `diff` and `paths`) **and** the repo to contain component files (`.tsx`, `.jsx`, `.vue`, `.svelte`)
 - `test-review` -> requires scope to contain test files (`*.test.*`, `*.spec.*`, `*_test.{go,py,rb}`, anything under `__tests__/`, `tests/`, `test/`, `spec/`)
 - `schema-review` -> requires scope to contain migration files (`migrations/`, `prisma/migrations/`, `db/migrate/`, `supabase/migrations/`, `alembic/versions/`), schema definitions (`schema.prisma`, `schema.rb`, `*.sql` schema dumps), RLS / policy files, or files containing ORM query calls (`.from(...)`, `.select(...)`, `prisma.X.find*`, etc.)
 - `dep-review` -> requires a dependency manifest in scope (`package.json`, `Cargo.toml`, `go.mod`, `pyproject.toml`, `requirements.txt`, `Gemfile`). In `diff` mode, also requires the diff to touch the manifest or lockfile (skip otherwise - no point running the full audit on every diff).
@@ -194,7 +198,7 @@ For each applicable reviewer, read its brief from `~/.claude/skills/full-review/
 
 Launch all agents in a **single message** for parallel execution. Use `subagent_type: "general-purpose"`.
 
-**Model per reviewer:** pass `model: "sonnet"` on every Agent call **except** `bughunt` and `security-review`, which omit the override and inherit the session model. Reviewing a diff against a focused brief is bounded work Sonnet handles well, and the fan-out (reviewers × repos) makes it the cost hotspot - but bug hunting and security analysis are judgement-heavy, so those two keep the stronger model.
+**Model per reviewer:** pass `model: "sonnet"` on every Agent call **except** `bughunt`, `security-review`, and `component-audit`, which omit the override and inherit the session model. Reviewing a diff against a focused brief is bounded work Sonnet handles well, and the fan-out (reviewers × repos) makes it the cost hotspot - but bug hunting and security analysis are judgement-heavy, and `component-audit` reasons over the whole component tree to spot naming taxonomy and consolidation seams, so those three keep the stronger model. (`component-audit` only ever runs as a single whole-repo agent, so the stronger model costs little here.)
 
 **Agent prompt template:**
 
@@ -499,5 +503,5 @@ End with one line: `✓ Prevention: {C} CLAUDE.md rules · {H} hooks · {I} tool
 - `reports/` is gitignored at the invocation cwd by design; these are transient working documents. In multi-repo runs the report lives only at the invocation cwd - the other scanned repos don't get a copy
 - Re-running `/full-review` creates a new timestamped file - previous reports are preserved
 - For very large codebases, remind the user that "whole repo" scope will produce a slow, noisy report - suggest narrowing to `app/`, `src/`, or a specific feature directory
-- For multi-repo runs, watch the agent count (reviewers × repos × parallelism). Step 3's warning catches the obvious cases, but 4+ repos × all 15 reviewers can still get expensive
+- For multi-repo runs, watch the agent count (reviewers × repos × parallelism). Step 3's warning catches the obvious cases, but 4+ repos × all 16 reviewers can still get expensive
 - Severity is **always relative to the category**. A CRITICAL accessibility issue is critical for accessibility, not equivalent to a CRITICAL security issue. The `[SEVERITY / Category]` label keeps this context visible
