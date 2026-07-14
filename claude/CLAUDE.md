@@ -8,6 +8,8 @@ If `docs/jira.md` is present (provided by a private plugin), follow it for full 
 
 Whenever you write or rewrite a Jira issue description - in any flow, whether or not the skill is explicitly invoked - always follow the `writing-jira-descriptions` skill (plain lead, ≤5 bullets, visible Given/When/Then acceptance criteria, and the verbose detail collapsed in a "Details for AI agents" ADF expand). This is the house format; use `contentFormat: "adf"` so the expand renders.
 
+When estimating/pointing a Jira work item, follow the story-points guide in `docs/story-points.md` (Fibonacci 1/2/3/5/8/13; 8 hints at a split, 13 needs breaking down).
+
 When a Jira issue is blocked (it has an open "is blocked by" link, or is in a Blocked status), prefix its title with a 🛑 emoji so blocked work is obvious at a glance. Remove the 🛑 once the blocker clears. Applies whenever you create or update issues.
 
 ## Agents and Skills
