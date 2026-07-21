@@ -59,3 +59,5 @@ cask "docker-desktop"
 cask "figma", args: { adopt: true }
 # Monospace font used as the VS Code editor font
 cask "font-inconsolata"
+# Customisation software for Logitech mice and keyboards
+cask "logitech-options-plus"
