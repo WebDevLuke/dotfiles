@@ -2,6 +2,8 @@
 
 macOS development environment managed as code.
 
+Run `make help` (or just `make`) at any time to list every available command - targets, shell aliases, and functions, grouped by category.
+
 ## Setup
 
 ```bash
@@ -32,7 +34,7 @@ Read-only health check that verifies the machine still matches the repo: symlink
 make macos
 ```
 
-Reapplies just the macOS configuration without a full setup: the default shell and preferences (`macos.sh` — `.osx` plus the `macdump`/`menudump` snapshots), and the `/etc/hosts` sync (`hosts.sh`). Useful after editing anything in `macos/` or running `macdump`/`menudump`.
+Reapplies just the macOS configuration without a full setup: the default shell and preferences (`macos.sh` — `.osx` plus the `macdump`/`menudump` snapshots), and the `/etc/hosts` sync (`hosts.sh`). Useful after editing anything in `macos/` or running `make macdump`/`make menudump`.
 
 > **First run on a fresh machine:** the Git Identity step reads your SSH signing keys from 1Password via the `op` CLI. If 1Password isn't signed in yet (`op signin`) with CLI integration enabled, that step is skipped with a warning and listed under "Needs attention" at the end — sign in and re-run `make setup` to finish git signing setup.
 
@@ -88,8 +90,8 @@ This symlinks it under `plugins/<name>` (gitignored), then re-runs the Claude Co
 ## Brewfile
 
 ```bash
-brewdump       # regenerate Brewfile from installed packages (also runs codedump)
-brewsnooze     # dismiss the "Brewfile is stale" reminder for 30 days
+make brewdump    # regenerate Brewfile from installed packages (also runs codedump)
+make brewsnooze  # dismiss the "Brewfile is stale" reminder for 30 days
 ```
 
 A terminal reminder appears if the Brewfile hasn't been synced in 30 days (configurable via `BREWDUMP_REMINDER_DAYS` in `config.sh`). A similar monthly reminder appears if the local dotfiles repo has fallen behind origin.
@@ -97,15 +99,15 @@ A terminal reminder appears if the Brewfile hasn't been synced in 30 days (confi
 ## Dock
 
 ```bash
-dockdump       # sync the current Dock app order into macos/.osx
+make dockdump    # sync the current Dock app order into macos/.osx
 ```
 
-Arrange your Dock how you like, then run `dockdump` to capture it. The app list is stored between the `dock-apps` markers in `macos/.osx` and reapplied with `dockutil` on the next `make setup`.
+Arrange your Dock how you like, then run `make dockdump` to capture it. The app list is stored between the `dock-apps` markers in `macos/.osx` and reapplied with `dockutil` on the next `make setup`.
 
 ## macOS Defaults
 
 ```bash
-macdump        # snapshot NSGlobalDomain defaults to macos/GlobalDefaults.plist
+make macdump     # snapshot NSGlobalDomain defaults to macos/GlobalDefaults.plist
 ```
 
 The snapshot (if present) is imported by the macOS setup step, so global preferences round-trip onto a fresh machine.
@@ -113,10 +115,10 @@ The snapshot (if present) is imported by the macOS setup step, so global prefere
 ## Menu Bar
 
 ```bash
-menudump       # snapshot the menu bar / Control Center layout into macos/
+make menudump    # snapshot the menu bar / Control Center layout into macos/
 ```
 
-Arrange the menu bar how you want in System Settings → Control Center (which items show, and whether each shows always or only when active), then run `menudump`. It captures the `com.apple.controlcenter` (per-host and main) and `com.apple.TextInputMenu` domains as plists, which the macOS setup step re-imports and restarts Control Center to apply. Because the visibility values are version-specific integer codes, snapshotting the real state is more reliable than hand-writing them. Note: Spotlight's menu bar icon is not exposed via defaults on current macOS, so it can't be captured this way.
+Arrange the menu bar how you want in System Settings → Control Center (which items show, and whether each shows always or only when active), then run `make menudump`. It captures the `com.apple.controlcenter` (per-host and main) and `com.apple.TextInputMenu` domains as plists, which the macOS setup step re-imports and restarts Control Center to apply. Because the visibility values are version-specific integer codes, snapshotting the real state is more reliable than hand-writing them. Note: Spotlight's menu bar icon is not exposed via defaults on current macOS, so it can't be captured this way.
 
 ## VS Code
 
@@ -126,7 +128,7 @@ Config lives in `vscode/` and is version-controlled:
 - `extensions.txt` is a snapshot of installed extensions, reinstalled on `make setup`. Refresh it after adding/removing extensions:
 
 ```bash
-codedump        # snapshot installed VS Code extensions into vscode/extensions.txt
+make codedump    # snapshot installed VS Code extensions into vscode/extensions.txt
 ```
 
 > VS Code's built-in **Settings Sync must be turned off** (Command Palette → "Settings Sync: Turn Off") — otherwise it fights the symlinks for ownership of the config files.

@@ -20,11 +20,11 @@ if [ -f ~/.brewdump_last ]; then
 	_now=$(date +%s)
 	_days=$(( (_now - _last) / 86400 ))
 	if [ "$_days" -ge "${BREWDUMP_REMINDER_DAYS:-30}" ]; then
-		echo "🍺 Brewfile last updated ${_days} days ago. Run 'brewdump' to sync or 'brewsnooze' to dismiss."
+		echo "🍺 Brewfile last updated ${_days} days ago. Run 'make -C ~/git/dotfiles brewdump' to sync or 'make -C ~/git/dotfiles brewsnooze' to dismiss."
 	fi
 	unset _last _now _days
 else
-	echo "🍺 Brewfile has never been synced. Run 'brewdump' to create a snapshot."
+	echo "🍺 Brewfile has never been synced. Run 'make -C ~/git/dotfiles brewdump' to create a snapshot."
 fi
 
 # Monthly nudge if the dotfiles repo has fallen behind origin (keeps multiple machines from diverging)

@@ -3,7 +3,7 @@
 #
 # Config files (settings, keybindings) are symlinked so that editing them in
 # VS Code writes straight back to the repo. Extensions are reinstalled from the
-# tracked vscode/extensions.txt; refresh that list with `codedump`.
+# tracked vscode/extensions.txt; refresh that list with `make codedump`.
 #
 # VS Code's built-in Settings Sync must be turned off, or it will fight these
 # symlinks for ownership of the same files.

@@ -1,7 +1,19 @@
+# Toggle between work and home mode
+alias switch='mode switch'
+
+## Navigation
 # Remap LS to also display hidden files
 alias ls='ls -a';
 # Go to git directory
 alias g='cd ~/git/';
+# Go up one directory
+alias ..='cd .. && ls'
+# Go up two directories
+alias ...='cd ../.. && ls'
+# Go up three directories
+alias ....='cd ../../.. && ls'
+
+## Git
 # What's happening?
 alias gs='git status';
 # Add all files to staging area
@@ -18,39 +30,29 @@ alias gd='git diff'
 alias gprune='git fetch --prune'
 # Hard Reset to HEAD
 alias greset='git reset HEAD --hard'
-# Node env shortcuts
-alias node-prod='export NODE_ENV=production'
-alias node-dev='export NODE_ENV=development'
+
+## Config
 # Open zsh config in vs code
 alias profile='code ~/.zshrc'
 # Open ssh config in vs code
 alias sshconfig='code ~/.ssh/config'
 # Open git config in vs code
 alias gitconfig='code ~/.gitconfig'
+
+## Network
 # Copy IP address to clipboard
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com | pbcopy | printf '=> IP copied to clipboard.\n'"
+# Show the local network IP address
 alias localip="ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'"
 # Copy public SSH key to clipboard
 alias sshkey="more ~/.ssh/id_ed25519.pub | pbcopy | printf '=> Public key copied to clipboard.\n'"
-# Go up one directory
-alias ..='cd .. && ls'
-# Go up two directories
-alias ...='cd ../.. && ls'
-# Go up three directories
-alias ....='cd ../../.. && ls'
+
+## Utilities
 # Delete all node modules within current dir
 alias nodemodules='find . -name "node_modules" -type d -prune -exec rm -rf '{}' +'
-# Toggle between work and home mode
-alias switch='mode switch'
-# Dump Brewfile and VS Code extensions, and record timestamp
-alias brewdump='brew bundle dump --file=~/git/dotfiles/Brewfile --force --no-vscode --describe && date +%s > ~/.brewdump_last && codedump'
-# Snooze the Brewfile reminder without dumping
-alias brewsnooze='date +%s > ~/.brewdump_last && echo "Brewfile reminder snoozed for 30 days"'
-# Snapshot installed VS Code extensions into the repo
-alias codedump='code --list-extensions > ~/git/dotfiles/vscode/extensions.txt && echo "Synced $(wc -l < ~/git/dotfiles/vscode/extensions.txt | tr -d " ") VS Code extensions to vscode/extensions.txt"'
+
+## Dotfiles
 # Pull latest dotfiles and re-run setup
 alias dotfiles='cd ~/git/dotfiles && git pull && bash setup.sh'
 # Re-symlink Claude Code config (agents, skills, hooks) without full setup
 alias sync='bash ~/git/dotfiles/setup/claude.sh'
-# Snapshot macOS defaults to dotfiles repo
-alias macdump='defaults export NSGlobalDomain ~/git/dotfiles/macos/GlobalDefaults.plist && echo "✅ macOS defaults exported"'
