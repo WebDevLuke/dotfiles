@@ -67,6 +67,8 @@ For each finding give: a one-line summary, the concrete problem, the risk if lef
 
 Present the findings and triage them **via the `/question` skill format** (`AskUserQuestion`). Do not batch-decide on the user's behalf. For each finding (or a sensible group), offer: **Fix in plan** / **Defer** / **Reject**. Respect the "Questions Before Changes" rule - findings are proposals until the user approves them.
 
+When a finding's options carry a recommendation, **mark it** - put the recommended option first and append "(Recommended)" to its label - per the `/question` format. Marking your steer is required, but it is not the same as acting on it: still present every option and let the user choose. Never pre-apply the recommended resolution to the plan before the user has selected it.
+
 ## Step 7: Revise the plan in place
 
 For every finding the user approved as **Fix in plan**, update the plan (the plan-mode plan or the plan file) to incorporate the fix. Keep edits surgical - change what the finding requires, don't rewrite the whole plan. If the plan has an Acceptance criteria section (per CLAUDE.md's Plan Files rule), make sure approved fixes are reflected there too. Show a short summary of what changed.
