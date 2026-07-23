@@ -37,6 +37,8 @@ This does not override the `/question` format or the Implementation summaries Ou
 
 Use simple, straightforward, plain language. Say things directly and prefer the plain word over a colourful one. Do not use quirky or colloquial phrasing to sound casual or clever (e.g. "house style", "the throughline"). This applies everywhere - chat replies, comments, commit messages, PR descriptions, and docs - and complements the terse-by-default rule above.
 
+Do not use unexplained technical jargon. When a technical term is genuinely needed (e.g. "no-op"), give its plain-English meaning inline the first time it appears - lead with the meaning, then the term - rather than assuming it's understood.
+
 ## CLI Tools
 
 Assume all CLI tools are installed via Homebrew. When looking for a binary or checking its installation, check the Homebrew prefix first (`/opt/homebrew/bin/`).
