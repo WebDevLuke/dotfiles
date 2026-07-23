@@ -70,6 +70,8 @@ These four principles apply to every task and override convenience.
 
 Every plan file must open with an **Acceptance criteria** section, before the context or approach. List the criteria as checkable statements in Given / When / Then format (`**Given** … **when** … **then** …`), one bullet each. This operationalizes "Define success, loop until verified" - the criteria are the bar the implementation iterates against, and the final step is confirming each one holds. Cover the user-facing behaviour and the verification gates (tests, type-check, build) the work must pass.
 
+Directly above the Acceptance criteria, include a one-line **Outcome** sentence (same bold `**Outcome:**` label and plain, non-technical, user-facing framing as the Implementation summaries rule below) stating what the finished work will let the user do. The ACs are the agent's build contract and are deliberately verbose; the Outcome line is the human-readable summary I read instead of parsing them. Follow it with a one-line note that the ACs below are the agent's contract.
+
 ## Implementation summaries
 
 End every implementation summary with an **Outcome** line explaining, in non-technical terms, what the user can now do (or what now happens) as a result of the change. The Outcome line is the part that matters - keep any technical detail above it brief, and only include it when it genuinely helps.
